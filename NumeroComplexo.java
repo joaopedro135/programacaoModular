@@ -49,6 +49,5 @@ public class NumeroComplexo {
         NumeroComplexo W = new NumeroComplexo(4, 5);
         NumeroComplexo X = Z.soma(W);
         System.out.println(Z + " + " + W + " = " + X);
-
     }
 }

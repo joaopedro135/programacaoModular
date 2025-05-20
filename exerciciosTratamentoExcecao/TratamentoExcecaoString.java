@@ -3,21 +3,26 @@ import java.util.Scanner;
 public class TratamentoExcecaoString {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        String string1 = null;
-        String string2 = null;
-
+        String input1;
+        String input2;
+        input1 = scanner.nextLine();
+        input2 = scanner.nextLine();
         try {
-            String input1 = scanner.nextLine();
-            if (!input1.isEmpty()) {                     //condição do if: Se a string não estiver vazia, então guarde a info em string1
-                string1 = input1;                        //Metódo necessário pois o scanner.nextline() nunca retorna null
-            }                                            //Então para reconhecer a exceção NullPointerException é preciso contornar este problema
-            String input2 = scanner.nextLine();
-            if (!input2.isEmpty()) {
-                string2 = input2;
+            if (input1.isEmpty() || input2.isEmpty()) {
+                throw new NullPointerException();
             }
         } catch (NullPointerException e) {
             System.out.println("Erro: String nula");
+            return; 
+        } finally {
+            scanner.close();
+        }
+        if (input1.length() > input2.length()) {
+            System.out.println("A primeira string é maior que a segunda.");
+        } else if (input1.length() < input2.length()) {
+            System.out.println("A segunda string é maior que a primeira.");
+        } else {
+            System.out.println("As strings têm o mesmo tamanho.");
         }
     }
 }

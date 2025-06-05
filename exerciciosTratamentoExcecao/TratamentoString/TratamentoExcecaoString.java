@@ -1,3 +1,4 @@
+package TratamentoString;
 import java.util.Scanner;
 
 public class TratamentoExcecaoString {

@@ -1,3 +1,4 @@
+package TratamentoArray;
 import java.util.Scanner;
 
 public class TratamentoExcecaoArray {
@@ -16,6 +17,9 @@ public class TratamentoExcecaoArray {
                     quantidadeDivisores++;
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("Erro: Estouro de limite do array");
+                    for (int j = 0; j < quantidadeDivisores; j++) {
+                        System.out.println(vetorDivisores[j] + " ");
+                    }
                     scanner.close();
                     return;
                 }

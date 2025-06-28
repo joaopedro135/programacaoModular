@@ -11,16 +11,16 @@ public class SwingApp extends JFrame {
     private CardLayout cardLayout;
 
     public SwingApp() {
-        setTitle("Uma Locadora Chamada Torres");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centraliza a janela na tela
+        setTitle("Uma Locadora Chamada Torres"); //titulo
+        setSize(600, 400); //tamanho da janela
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //fecha janela então fecha operação
+        setLocationRelativeTo(null); // centraliza a janela na tela
 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
         // Painel Principal
-        JPanel homePanel = createButtonPanel("Locadora Torres", new String[]{"Cliente", "Veículo", "Funcionário", "Locação"});
+        JPanel homePanel = createButtonPanel("Locadora Torres", new String[]{"Cliente", "Veículo", "Funcionário", "Locação"}); //criando botão com
         mainPanel.add(homePanel, "Home");
 
         // Submenus
@@ -37,26 +37,6 @@ public class SwingApp extends JFrame {
         mainPanel.add(locacaoPanel, "Locacao");
 
         add(mainPanel);
-
-        // Adiciona ActionListeners para os botões do menu principal
-        for (Component comp : homePanel.getComponents()) {
-            if (comp instanceof JPanel) {
-                JPanel innerPanel = (JPanel) comp;
-                for (Component innerComp : innerPanel.getComponents()) {
-                    if (innerComp instanceof JButton) {
-                        JButton button = (JButton) innerComp;
-                        button.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                String command = e.getActionCommand();
-                                cardLayout.show(mainPanel, "cliente");
-                            
-                            }
-                        });
-                    }
-                }
-            }
-        }
 
         // Adiciona um botão de "Voltar" para cada submenu
         addBackButton(clientePanel, "Home");

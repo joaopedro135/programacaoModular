@@ -3,6 +3,7 @@ package Visao;
 import java.awt.*;
 import javax.swing.*;
 import Modelo.Cliente;
+import Modelo.Veiculo;
 import Persistencia.BancoDeDados;
 
 public class Janela extends JFrame {
@@ -50,6 +51,22 @@ public class Janela extends JFrame {
         // PÁGINA PRINCIPAL VEÍCULO
         JPanel veiculoPanel = criarVeiculoPanel();
         mainPanel.add(veiculoPanel, "veiculo");
+
+        // ABAS DA PÁGINA VEÍCULO
+        JPanel adicionarVeiculoPanel = criarAdicionarVeiculoPanel();
+        mainPanel.add(adicionarVeiculoPanel, "adicionarVeiculo");
+
+        JPanel alterarVeiculoPanel = criarAlterarVeiculoPanel();
+        mainPanel.add(alterarVeiculoPanel, "alterarVeiculo");
+
+        JPanel apagarVeiculoPanel = criarApagarVeiculoPanel();
+        mainPanel.add(apagarVeiculoPanel, "apagarVeiculo");
+
+        JPanel buscarVeiculoPanel = criarBuscarVeiculoPanel();
+        mainPanel.add(buscarVeiculoPanel, "buscarVeiculo");
+
+        JPanel visualizarTodosVeiculosPanel = criarVisualizarTodosVeiculosPanel();
+        mainPanel.add(visualizarTodosVeiculosPanel, "visualizarTodosVeiculos");
 
         // PÁGINA PRINCIPAL FUNCIONÁRIO
         JPanel funcionarioPanel = criarFuncionarioPanel();
@@ -472,10 +489,114 @@ public class Janela extends JFrame {
 
         veiculoPanel.add(veiculoButtonPanel, BorderLayout.CENTER);
         
+        // EVENTO EM BOTÃO ADICIONAR ---> IR PARA PAINEL ADICIONAR VEÍCULO
+        btnInserir.addActionListener(e -> cardLayout.show(mainPanel, "adicionarVeiculo"));
+        
+        // EVENTO EM BOTÃO ALTERAR ---> IR PARA PAINEL ALTERAR VEÍCULO
+        btnAlterar.addActionListener(e-> cardLayout.show(mainPanel, "alterarVeiculo"));
+        
+        // EVENTO EM BOTÃO APAGAR ---> IR PARA PAINEL APAGAR VEÍCULO
+        btnApagar.addActionListener(e -> cardLayout.show(mainPanel, "apagarVeiculo"));
+        
+        // EVENTO EM BOTÃO BUSCAR ---> IR PARA PAINEL BUSCAR VEÍCULO
+        btnBuscarId.addActionListener(e -> cardLayout.show(mainPanel, "buscarVeiculo"));
+        
+        // EVENTO EM BOTÃO VISUALIZAR TODOS OS FUNCIONÁRIOS ---> IR PARA PAINEL VISUALIZAR TODOS OS VEÍCULOS
+        btnVisualizarTodos.addActionListener(e -> cardLayout.show(mainPanel, "visualizarTodosVeiculos"));
+        
         // EVENTO EM BOTÃO VOLTAR ---> IR PARA PAINEL HOME
         btnVoltar.addActionListener(e -> cardLayout.show(mainPanel, "home"));
 
         return veiculoPanel;
+    }
+
+    private JPanel criarAdicionarVeiculoPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(60, 100, 60, 100));
+
+        JLabel title = new JLabel("Adicionar Veículo", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 22));
+        panel.add(title, BorderLayout.NORTH);
+
+        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JLabel lblMarca = new JLabel("Marca do veículo:");
+        JTextField txtMarca = new JTextField();
+        JLabel lblModelo = new JLabel("Modelo do veículo:");
+        JTextField txtModelo = new JTextField();
+        JLabel lblCor = new JLabel("Cor do veículo:");
+        JTextField txtCor = new JTextField();
+        JLabel lblAno = new JLabel("Ano do veículo:");
+        JTextField txtAno = new JTextField();
+        JLabel lblValorDiario = new JLabel("Valor da diária:");
+        JTextField txtValorDiario = new JTextField();
+        JLabel lblId = new JLabel("ID do veículo:");
+        JTextField txtId = new JTextField();
+
+        formPanel.add(lblMarca);
+        formPanel.add(txtMarca);
+        formPanel.add(lblModelo);
+        formPanel.add(txtModelo);
+        formPanel.add(lblCor);
+        formPanel.add(txtCor);
+        formPanel.add(lblAno);
+        formPanel.add(txtAno);
+        formPanel.add(lblValorDiario);
+        formPanel.add(txtValorDiario);
+        formPanel.add(lblId);
+        formPanel.add(txtId);
+
+        JButton btnConfirmar = new JButton("Confirmar");
+        JButton btnVoltar = new JButton("Voltar");
+
+        formPanel.add(btnConfirmar);
+        formPanel.add(btnVoltar);
+
+        panel.add(formPanel, BorderLayout.CENTER);
+
+        // EVENTO EM BOTÃO VOLTAR ---> IR PARA PAINEL VEÍCULO
+        btnVoltar.addActionListener(e -> cardLayout.show(mainPanel, "veiculo"));
+
+        btnConfirmar.addActionListener(e -> {
+            String marca = txtMarca.getText().trim();
+            String modelo = txtModelo.getText().trim();
+            String cor = txtCor.getText().trim();
+            String anoStr = txtAno.getText().trim();
+            String valorDiarioStr = txtValorDiario.getText().trim();
+            String idStr = txtId.getText().trim();
+
+            if (marca.isEmpty() || modelo.isEmpty() || cor.isEmpty() ||
+                anoStr.isEmpty() || valorDiarioStr.isEmpty() || idStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int ano, id;
+            double valorDiario;
+            try {
+                ano = Integer.parseInt(anoStr);
+                valorDiario = Double.parseDouble(valorDiarioStr);
+                id = Integer.parseInt(idStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Ano, valor da diária ou ID inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (bancoDeDados.getVeiculos().procuraId(id) != null) {
+                JOptionPane.showMessageDialog(this, "ID já existe.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Veiculo veiculo = new Veiculo(marca, modelo, ano, cor, valorDiario, id);
+            bancoDeDados.getVeiculos().insercao(veiculo);
+            JOptionPane.showMessageDialog(this, "Veículo adicionado com sucesso!");
+            txtMarca.setText("");
+            txtModelo.setText("");
+            txtCor.setText("");
+            txtAno.setText("");
+            txtValorDiario.setText("");
+            txtId.setText("");
+        });
+        return panel;
     }
 
     private JPanel criarFuncionarioPanel() {
